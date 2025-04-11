@@ -18,8 +18,6 @@ class _AddNotePageState extends State<AddNotePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Note"),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.blue,
         actions: [
           IconButton(onPressed: () {
             final name = nameController.text;

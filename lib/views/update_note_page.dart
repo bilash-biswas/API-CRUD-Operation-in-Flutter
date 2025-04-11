@@ -29,8 +29,6 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Update Note"),
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.blue,
           actions: [
             IconButton(
               onPressed: () {

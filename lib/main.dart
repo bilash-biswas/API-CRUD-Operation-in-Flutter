@@ -6,11 +6,11 @@ import 'package:flutter_api_crud_mvvm/views/home_page.dart';
 import 'package:flutter_api_crud_mvvm/views/update_note_page.dart';
 import 'package:provider/provider.dart';
 
+import 'viewmodels/MyTheme.dart';
+
 void main() {
   runApp(
-    ChangeNotifierProvider(
-        create: (_) => UserViewModel()..getUsers(),
-        child: const MyApp()),
+    const MyApp(),
   );
 }
 
@@ -19,22 +19,49 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Flutter MVVM App",
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: const HomePage(),
-      routes: {
-        MyRoutes.homeRoute: (context) => const HomePage(),
-        MyRoutes.addNoteRoute: (context) => const AddNotePage(),
-        MyRoutes.updateNoteRoute: (context) => const UpdateNotePage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => MyTheme()),
+      ],
+      child: Consumer<MyTheme>(
+        builder: (context, themeVM, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Flutter MVVM App",
+          theme: themeVM.isDarkTheme
+              ? ThemeData.dark().copyWith(
+                  brightness: Brightness.dark,
+                  scaffoldBackgroundColor: Colors.black,
+                  cardColor: Colors.grey[900],
+                  dividerColor: Colors.white54,
+                  primaryColor: Colors.white,
+                  iconTheme: const IconThemeData(color: Colors.white),
+                  textTheme: ThemeData.dark().textTheme.apply(
+                        bodyColor: Colors.white,
+                        displayColor: Colors.white,
+                      ),
+                )
+              : ThemeData.light().copyWith(
+                  brightness: Brightness.light,
+                  scaffoldBackgroundColor: Colors.white,
+                  cardColor: Colors.white,
+                  dividerColor: Colors.grey,
+                  primaryColor: Colors.blue,
+                  iconTheme: const IconThemeData(color: Colors.black),
+                  textTheme: ThemeData.light().textTheme.apply(
+                        bodyColor: Colors.black,
+                        displayColor: Colors.black,
+                      ),
+                ),
+          themeMode: ThemeMode.system,
+          home: const HomePage(),
+          routes: {
+            MyRoutes.homeRoute: (context) => const HomePage(),
+            MyRoutes.addNoteRoute: (context) => const AddNotePage(),
+            MyRoutes.updateNoteRoute: (context) => const UpdateNotePage(),
+          },
+        ),
+      ),
     );
   }
 }
-
-
-
-

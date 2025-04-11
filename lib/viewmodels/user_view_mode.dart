@@ -4,6 +4,8 @@ import 'package:flutter_api_crud_mvvm/services/api_service.dart';
 
 class UserViewModel extends ChangeNotifier {
   List<UserModel> users = [];
+  List<UserModel> _allUsers = [];
+
   bool isLoading = false;
   final ApiService _apiService = ApiService();
 
@@ -12,6 +14,7 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
 
     users = await _apiService.fetchUsers();
+    _allUsers = users;
 
     isLoading = false;
     notifyListeners();
@@ -33,11 +36,15 @@ class UserViewModel extends ChangeNotifier {
   }
 
   Future<void> filterUsers(String query) async {
-    isLoading = true;
-    notifyListeners();
-    users = await _apiService.fetchUsers();
-    users = users.where((user) => user.name.toLowerCase().contains(query.toLowerCase())).toList();
-    isLoading = false;
+    if (query.isEmpty) {
+      users = _allUsers;
+    } else {
+      users = _allUsers
+          .where((user) =>
+              user.name.toLowerCase().contains(query.toLowerCase()) ||
+              user.email.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
     notifyListeners();
   }
 }
