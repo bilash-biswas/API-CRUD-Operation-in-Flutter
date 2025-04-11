@@ -31,4 +31,13 @@ class UserViewModel extends ChangeNotifier {
     await _apiService.deleteUser(id);
     await getUsers();
   }
+
+  Future<void> filterUsers(String query) async {
+    isLoading = true;
+    notifyListeners();
+    users = await _apiService.fetchUsers();
+    users = users.where((user) => user.name.toLowerCase().contains(query.toLowerCase())).toList();
+    isLoading = false;
+    notifyListeners();
+  }
 }

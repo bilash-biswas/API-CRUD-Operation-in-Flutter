@@ -19,10 +19,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    user = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as UserModel;
+    user = ModalRoute.of(context)!.settings.arguments as UserModel;
     titleController.text = user.name;
     emailController.text = user.email;
   }
@@ -40,7 +37,8 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                 final title = titleController.text;
                 final email = emailController.text;
                 if (title.isNotEmpty && email.isNotEmpty) {
-                  final userVM = Provider.of<UserViewModel>(context, listen: false);
+                  final userVM =
+                      Provider.of<UserViewModel>(context, listen: false);
                   userVM.updateUser(user.id, title, email);
                   Navigator.pop(context);
                 }
@@ -67,6 +65,12 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                     labelText: "Enter Email", border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "Created At : ${user.create_at}",
+                    textAlign: TextAlign.end,
+                  ))
             ],
           ),
         ));
